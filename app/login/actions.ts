@@ -8,6 +8,11 @@ export type GirisState = {
   email: string;
 };
 
+// Iki adimli giris (sifre sonrasi e-posta kodu) anahtari.
+// Ozel SMTP baglanmadan acilmamali: Supabase'in yerlesik e-posta servisi
+// saatte birkac e-postayla sinirli, ekip girisleri hemen tikanir.
+const OTP_AKTIF = false;
+
 export async function girisYap(_prevState: GirisState, formData: FormData): Promise<GirisState> {
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
   const password = String(formData.get("password") ?? "");
@@ -25,6 +30,11 @@ export async function girisYap(_prevState: GirisState, formData: FormData): Prom
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) {
     return { status: "error", message: "E-posta veya şifre hatalı.", email: "" };
+  }
+
+  if (!OTP_AKTIF) {
+    // OTP kapali: sifre yeterli, oturum acildi
+    return { status: "ok", message: "", email };
   }
 
   // Sifre dogru, ama kod dogrulanana kadar oturum acik kalmasin

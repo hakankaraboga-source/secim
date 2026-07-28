@@ -24,11 +24,11 @@ export default function LoginPage() {
   const email = sifreState.email;
 
   useEffect(() => {
-    if (kodState.status === "ok") {
+    if (kodState.status === "ok" || sifreState.status === "ok") {
       router.replace("/");
       router.refresh();
     }
-  }, [kodState, router]);
+  }, [kodState, sifreState, router]);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-4">
