@@ -6,16 +6,34 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { requireAdmin } from "@/lib/auth";
 import type { UserRole } from "@/lib/database.types";
 
-export async function kullaniciDavetEt(formData: FormData) {
+export type KullaniciEkleState = { status: "idle" | "ok" | "error"; message: string };
+
+export async function kullaniciEkle(
+  _prevState: KullaniciEkleState,
+  formData: FormData
+): Promise<KullaniciEkleState> {
   await requireAdmin();
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
-  if (!email || !email.includes("@")) throw new Error("Geçerli bir e-posta adresi girin.");
+  const password = String(formData.get("password") ?? "");
+  if (!email || !email.includes("@")) {
+    return { status: "error", message: "Geçerli bir e-posta adresi girin." };
+  }
+  if (password.length < 6) {
+    return { status: "error", message: "Şifre en az 6 karakter olmalı." };
+  }
 
   const admin = createAdminClient();
-  const { error } = await admin.auth.admin.inviteUserByEmail(email);
-  if (error) throw new Error(error.message);
+  const { error } = await admin.auth.admin.createUser({
+    email,
+    password,
+    email_confirm: true,
+  });
+  if (error) {
+    return { status: "error", message: `Kullanıcı eklenemedi: ${error.message}` };
+  }
 
   revalidatePath("/yonetim/kullanicilar");
+  return { status: "ok", message: `${email} eklendi. Şifreyi kullanıcıya iletin.` };
 }
 
 export async function kullaniciGuncelle(userId: string, formData: FormData) {

@@ -1,6 +1,6 @@
 # BATSO Seçim Kampanyası — Saha ve Seçmen Takip Uygulaması
 
-Mobil öncelikli (PWA) web uygulaması. Next.js 16 (App Router) + Supabase (Postgres, e-posta OTP auth, RLS).
+Mobil öncelikli (PWA) web uygulaması. Next.js 16 (App Router) + Supabase (Postgres, e-posta + şifre auth, RLS).
 
 ## Kurulum
 
@@ -23,15 +23,15 @@ cp .env.local.example .env.local
 
 ### 3. İlk admin kullanıcısını oluşturma
 
-Bu uygulamada herkes admin tarafından davet edilir (self-signup yok). İlk admin hesabını oluşturmak için:
+Bu uygulamada self-signup yok; kullanıcıları admin ekler. İlk admin hesabını oluşturmak için:
 
-1. Supabase Dashboard > Authentication > Users > "Invite user" ile kendi e-postanızı davet edin.
+1. Supabase Dashboard > Authentication > Users > "Add user" > "Create new user" ile kendi e-postanızı ve bir şifre girin ("Auto Confirm User" işaretli olsun).
 2. Kullanıcı oluşturulduğunda `profiles` tablosuna otomatik bir satır eklenir (varsayılan rol: `saha`).
 3. SQL Editor'de bu kullanıcıyı admin yapın:
    ```sql
    update profiles set rol = 'admin' where email = 'sizin-eposta@adresiniz.com';
    ```
-4. Artık `/login` sayfasından bu e-posta ile giriş yapıp kod doğrulayarak admin olarak sisteme girebilirsiniz. Sonraki kullanıcıları `/yonetim/kullanicilar` sayfasındaki "Davet Et" formuyla ekleyebilirsiniz.
+4. Artık `/login` sayfasından bu e-posta + şifre ile giriş yapabilirsiniz. Sonraki kullanıcıları `/yonetim/kullanicilar` sayfasındaki "Yeni Kullanıcı Ekle" formuyla (e-posta + geçici şifre belirleyerek) ekleyebilirsiniz.
 
 ### 4. Geliştirme sunucusu
 
@@ -44,7 +44,7 @@ npm run dev
 
 - **Barındırma:** Next.js + Supabase (cloud). Sunucu bölgesi Türkiye'de değildir (Supabase'in Türkiye lokasyonu yok) — bu, hız/basitlik için bilinçli bir tercihtir. KVKK açısından veri egemenliği kritikse ileride self-hosted Supabase (Türkiye VPS) geçişi mimariyi değiştirmeden yapılabilir.
 - **Neden web (PWA) ve Flutter değil:** App store/Play Store yayınlama ve inceleme süreçleriyle uğraşmamak için mobil öncelikli, ana ekrana eklenebilir bir web uygulaması olarak geliştirildi. Bilinen ödünler: tarayıcıda ekran görüntüsü engelleme güvenilir şekilde yapılamaz; tam offline mod native kadar güçlü değildir.
-- **Kimlik doğrulama:** Şifre yok, e-posta OTP (Supabase Auth `signInWithOtp` / `verifyOtp`). Kullanıcılar admin tarafından davet edilir.
+- **Kimlik doğrulama:** E-posta + şifre (Supabase Auth `signInWithPassword`). Kullanıcıları admin ekler, self-signup yoktur. (İlk tasarımdaki e-posta OTP akışı, Supabase'in varsayılan e-posta servisinin hız sınırları ve kurulum karmaşıklığı nedeniyle şifre girişiyle değiştirildi; OTP Faz 2'de yeniden değerlendirilebilir.)
 - **Yetkilendirme:** Postgres Row Level Security ile. `lib/supabase/client.ts` / `server.ts` bilinçli olarak Supabase'in generic `Database` tipini kullanmıyor (bkz. dosya içi not) — sorgu sonuçları `lib/database.types.ts` içindeki satır tipleriyle elle cast edilir.
 - **Next.js 16 notu:** `middleware.ts` bu sürümde `proxy.ts` olarak adlandırıldı; `params`/`searchParams` artık `Promise`.
 

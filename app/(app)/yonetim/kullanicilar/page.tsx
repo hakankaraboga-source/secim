@@ -3,7 +3,8 @@ import { requireAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { Header } from "@/components/Header";
 import { KULLANICI_ROLLERI } from "@/lib/constants";
-import { kullaniciGuncelle, kullaniciDavetEt } from "./actions";
+import { KullaniciEkleForm } from "@/components/KullaniciEkleForm";
+import { kullaniciGuncelle } from "./actions";
 
 export default async function KullanicilarPage() {
   const profile = await requireAdmin();
@@ -22,18 +23,7 @@ export default async function KullanicilarPage() {
           ← Yönetim paneline dön
         </Link>
 
-        <form action={kullaniciDavetEt} className="flex gap-2 rounded-xl bg-white p-3 shadow-sm">
-          <input
-            type="email"
-            name="email"
-            required
-            placeholder="yeni.kullanici@ornek.com"
-            className="h-11 flex-1 rounded-lg border border-slate-300 px-3 text-sm"
-          />
-          <button type="submit" className="h-11 rounded-lg bg-slate-900 px-4 text-sm font-medium text-white">
-            Davet Et
-          </button>
-        </form>
+        <KullaniciEkleForm />
 
         <ul className="space-y-2">
           {(kullanicilar ?? []).map((k) => {
