@@ -44,7 +44,9 @@ npm run dev
 
 - **Barındırma:** Next.js + Supabase (cloud). Sunucu bölgesi Türkiye'de değildir (Supabase'in Türkiye lokasyonu yok) — bu, hız/basitlik için bilinçli bir tercihtir. KVKK açısından veri egemenliği kritikse ileride self-hosted Supabase (Türkiye VPS) geçişi mimariyi değiştirmeden yapılabilir.
 - **Neden web (PWA) ve Flutter değil:** App store/Play Store yayınlama ve inceleme süreçleriyle uğraşmamak için mobil öncelikli, ana ekrana eklenebilir bir web uygulaması olarak geliştirildi. Bilinen ödünler: tarayıcıda ekran görüntüsü engelleme güvenilir şekilde yapılamaz; tam offline mod native kadar güçlü değildir.
-- **Kimlik doğrulama:** E-posta + şifre (Supabase Auth `signInWithPassword`). Kullanıcıları admin ekler, self-signup yoktur. (İlk tasarımdaki e-posta OTP akışı, Supabase'in varsayılan e-posta servisinin hız sınırları ve kurulum karmaşıklığı nedeniyle şifre girişiyle değiştirildi; OTP Faz 2'de yeniden değerlendirilebilir.)
+- **Kimlik doğrulama:** İki adımlı — önce e-posta + şifre (`signInWithPassword`), doğruysa oturum açılmadan e-postaya 6 haneli kod gönderilir (`signInWithOtp`), kod doğrulanınca (`verifyOtp`) oturum açılır. Kullanıcıları admin ekler, self-signup yoktur.
+  - **Gerekli Supabase ayarı:** Authentication > Email Templates > "Magic Link" şablonu `{{ .Token }}` içermelidir, aksi halde e-postada kod yerine link gider.
+  - **Önemli:** Supabase'in yerleşik e-posta servisi saatte yalnızca birkaç e-posta gönderir. Ekip kullanımı için Authentication > SMTP Settings bölümünden özel SMTP (ör. Resend) bağlanmalıdır.
 - **Yetkilendirme:** Postgres Row Level Security ile. `lib/supabase/client.ts` / `server.ts` bilinçli olarak Supabase'in generic `Database` tipini kullanmıyor (bkz. dosya içi not) — sorgu sonuçları `lib/database.types.ts` içindeki satır tipleriyle elle cast edilir.
 - **Next.js 16 notu:** `middleware.ts` bu sürümde `proxy.ts` olarak adlandırıldı; `params`/`searchParams` artık `Promise`.
 

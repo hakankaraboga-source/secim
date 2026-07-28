@@ -38,7 +38,7 @@ export default async function GorevlerPage() {
   return (
     <div className="flex flex-1 flex-col">
       <Header profile={profile} title="Görevler" />
-      <div className="mx-auto w-full max-w-2xl flex-1 space-y-2 p-4">
+      <div className="mx-auto w-full max-w-2xl md:max-w-4xl flex-1 space-y-2 p-4">
         {(gorevler ?? []).length === 0 ? (
           <p className="rounded-xl bg-white p-4 text-center text-sm text-slate-500 shadow-sm">
             Bekleyen görev yok.

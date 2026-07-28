@@ -5,7 +5,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const profile = await requireProfile();
 
   return (
-    <div className="flex flex-1 flex-col pb-16">
+    <div className="flex flex-1 flex-col pb-16 md:pb-0 md:pl-56">
       {children}
       <BottomNav rol={profile.rol} />
     </div>

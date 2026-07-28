@@ -68,7 +68,7 @@ export default async function FirmaDetayPage({ params }: { params: Promise<{ id:
   return (
     <div className="flex flex-1 flex-col">
       <Header profile={profile} title={firma.firma_unvani} />
-      <div className="mx-auto w-full max-w-2xl flex-1 space-y-4 p-4">
+      <div className="mx-auto w-full max-w-2xl md:max-w-4xl flex-1 space-y-4 p-4">
         <Link href="/firmalar" className="text-sm text-slate-500">
           ← Firma listesine dön
         </Link>

@@ -11,7 +11,7 @@ export default async function YeniFirmaPage() {
   return (
     <div className="flex flex-1 flex-col">
       <Header profile={profile} title="Yeni Firma Ekle" />
-      <div className="mx-auto w-full max-w-2xl flex-1 p-4">
+      <div className="mx-auto w-full max-w-2xl md:max-w-4xl flex-1 p-4">
         <form action={firmaOlustur} className="flex flex-col gap-2 rounded-xl bg-white p-4 shadow-sm">
           <Field name="firma_unvani" label="Firma Unvanı *" required />
           <Field name="yetkili_kisi" label="Yetkili Kişi" />

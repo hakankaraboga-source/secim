@@ -11,9 +11,9 @@ export default async function RaporlarPage() {
   return (
     <div className="flex flex-1 flex-col">
       <Header profile={profile} title="Meslek Grubu Raporları" />
-      <div className="mx-auto w-full max-w-2xl flex-1 space-y-3 p-4">
+      <div className="mx-auto w-full max-w-2xl md:max-w-4xl flex-1 space-y-3 p-4 md:grid md:grid-cols-2 md:content-start md:gap-4 md:space-y-0">
         {(ozet ?? []).length === 0 ? (
-          <p className="rounded-xl bg-white p-4 text-center text-sm text-slate-500 shadow-sm">
+          <p className="rounded-xl bg-white p-4 text-center text-sm text-slate-500 shadow-sm md:col-span-2">
             Görüntülenecek veri yok.
           </p>
         ) : (

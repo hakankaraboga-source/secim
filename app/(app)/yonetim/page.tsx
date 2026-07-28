@@ -59,7 +59,7 @@ export default async function YonetimPage() {
   return (
     <div className="flex flex-1 flex-col">
       <Header profile={profile} title="Yönetim Paneli" />
-      <div className="mx-auto w-full max-w-2xl flex-1 space-y-4 p-4">
+      <div className="mx-auto w-full max-w-2xl md:max-w-4xl flex-1 space-y-4 p-4">
         <div className="flex gap-2">
           <Link href="/yonetim/kullanicilar" className="flex-1 rounded-xl bg-white p-3 text-center text-sm font-medium text-slate-700 shadow-sm">
             👤 Kullanıcılar

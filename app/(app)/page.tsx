@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getBekleyenGorevler, getGunlukGorusmeSayisi } from "@/lib/queries";
 import { DestekBadge } from "@/components/DestekBadge";
 import { Header } from "@/components/Header";
+import { CihazBanner } from "@/components/CihazBanner";
 import type { DestekDurumu } from "@/lib/constants";
 
 export default async function AnaSayfa() {
@@ -36,7 +37,8 @@ export default async function AnaSayfa() {
   return (
     <div className="flex flex-1 flex-col">
       <Header profile={profile} title="Ana Sayfa" />
-      <div className="mx-auto w-full max-w-2xl flex-1 space-y-4 p-4">
+      <div className="mx-auto w-full max-w-2xl md:max-w-4xl flex-1 space-y-4 p-4">
+        <CihazBanner />
         <div className="grid grid-cols-2 gap-3">
           <div className="rounded-xl bg-white p-4 shadow-sm">
             <p className="text-xs text-slate-500">Bugün yapılan görüşme</p>

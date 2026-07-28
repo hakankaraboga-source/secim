@@ -34,7 +34,7 @@ export default async function SecimGunuPage({
   return (
     <div className="flex flex-1 flex-col">
       <Header profile={profile} title="Seçim Günü Modu" />
-      <div className="mx-auto w-full max-w-2xl flex-1 space-y-3 p-4">
+      <div className="mx-auto w-full max-w-2xl md:max-w-4xl flex-1 space-y-3 p-4">
         <div className="grid grid-cols-3 gap-2 text-center text-xs">
           <StatBox label="Oy Kullandı" value={ozet?.oy_kullandi ?? 0} color="#16a34a" />
           <StatBox label="Yolda" value={ozet?.yolda ?? 0} color="#2563eb" />

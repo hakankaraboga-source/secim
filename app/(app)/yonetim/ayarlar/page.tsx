@@ -16,7 +16,7 @@ export default async function AyarlarPage() {
   return (
     <div className="flex flex-1 flex-col">
       <Header profile={profile} title="Seçim Ayarları" />
-      <div className="mx-auto w-full max-w-2xl flex-1 space-y-3 p-4">
+      <div className="mx-auto w-full max-w-2xl md:max-w-4xl flex-1 space-y-3 p-4">
         <Link href="/yonetim" className="text-sm text-slate-500">
           ← Yönetim paneline dön
         </Link>
