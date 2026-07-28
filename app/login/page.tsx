@@ -36,6 +36,7 @@ export default function LoginPage() {
         <CihazBanner />
         <div className="rounded-2xl bg-white p-6 shadow-sm">
           <h1 className="mb-1 text-xl font-semibold text-slate-900">BATSO Seçim Kampanyası</h1>
+          <p className="mb-4 text-sm font-medium text-slate-700">Başkan Adayımız: Ferdi Kurt</p>
           <p className="mb-6 text-sm text-slate-500">
             {adim === "sifre"
               ? "E-posta ve şifrenizle giriş yapın."

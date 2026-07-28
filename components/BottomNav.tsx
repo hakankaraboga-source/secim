@@ -52,7 +52,8 @@ export function BottomNav({ rol }: { rol: UserRole }) {
       <nav className="fixed inset-y-0 left-0 z-20 hidden w-56 flex-col border-r border-slate-200 bg-white md:flex">
         <div className="border-b border-slate-100 px-4 py-4">
           <p className="text-sm font-semibold text-slate-900">BATSO Kampanya</p>
-          <p className="text-xs text-slate-400">Seçim takip sistemi</p>
+          <p className="text-sm font-medium text-slate-700">Ferdi Kurt</p>
+          <p className="text-xs text-slate-400">Başkan Adayımız</p>
         </div>
         <ul className="flex-1 space-y-1 p-3">
           {items.map((item) => (
