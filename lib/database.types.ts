@@ -20,6 +20,7 @@ export interface ProfileRow {
   id: string;
   email: string;
   ad_soyad: string | null;
+  telefon: string | null;
   rol: UserRole;
   meslek_grubu_id: string | null;
   aktif: boolean;

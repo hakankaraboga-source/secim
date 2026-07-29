@@ -24,7 +24,7 @@ export default async function GorevlerPage() {
   }
 
   const { data } = await query;
-  const gorevler = data as unknown as Array<{
+  const gorevler = (data as unknown as Array<{
     id: string;
     firma_unvani: string;
     yetkili_kisi: string | null;
@@ -33,7 +33,13 @@ export default async function GorevlerPage() {
     bekleyen_gorev: string | null;
     tekrar_arama_tarihi: string | null;
     ana_sorumlu: { ad_soyad: string | null; email: string } | null;
-  }> | null;
+  }> | null)?.sort((a, b) => {
+    // Kampanya onceligi: kararsizlar en uste, sonra tarihe gore
+    const aK = a.destek_durumu === "kararsiz" ? 0 : 1;
+    const bK = b.destek_durumu === "kararsiz" ? 0 : 1;
+    if (aK !== bK) return aK - bK;
+    return String(a.tekrar_arama_tarihi ?? "9999").localeCompare(String(b.tekrar_arama_tarihi ?? "9999"));
+  });
 
   return (
     <div className="flex flex-1 flex-col">

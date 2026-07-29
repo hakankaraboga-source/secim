@@ -43,11 +43,12 @@ export async function kullaniciGuncelle(userId: string, formData: FormData) {
   const rol = String(formData.get("rol") ?? "saha") as UserRole;
   const meslek_grubu_id = String(formData.get("meslek_grubu_id") ?? "").trim() || null;
   const ad_soyad = String(formData.get("ad_soyad") ?? "").trim() || null;
+  const telefon = String(formData.get("telefon") ?? "").trim() || null;
   const aktif = formData.get("aktif") === "on";
 
   const { error } = await supabase
     .from("profiles")
-    .update({ rol, meslek_grubu_id, ad_soyad, aktif })
+    .update({ rol, meslek_grubu_id, ad_soyad, telefon, aktif })
     .eq("id", userId);
 
   if (error) throw new Error(error.message);

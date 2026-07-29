@@ -38,6 +38,13 @@ export default async function KullanicilarPage() {
                     placeholder="Ad Soyad"
                     className="h-10 rounded-lg border border-slate-300 px-2 text-sm"
                   />
+                  <input
+                    name="telefon"
+                    type="tel"
+                    defaultValue={k.telefon ?? ""}
+                    placeholder="Telefon (SMS bildirimleri için)"
+                    className="h-10 rounded-lg border border-slate-300 px-2 text-sm"
+                  />
                   <select name="rol" defaultValue={k.rol} className="h-10 rounded-lg border border-slate-300 px-2 text-sm">
                     {Object.entries(KULLANICI_ROLLERI).map(([key, label]) => (
                       <option key={key} value={key}>

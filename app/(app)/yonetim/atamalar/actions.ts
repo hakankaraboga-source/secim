@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
 import { epostaGonder } from "@/lib/email";
+import { smsGonder } from "@/lib/sms";
 
 export type AtamaSonucu = {
   status: "idle" | "ok" | "error";
@@ -78,10 +79,17 @@ export async function topluAta(_prevState: AtamaSonucu, formData: FormData): Pro
 
   const { data: sorumlu } = await supabase
     .from("profiles")
-    .select("ad_soyad, email")
+    .select("ad_soyad, email, telefon")
     .eq("id", sorumluId)
     .single();
   const sorumluAd = sorumlu?.ad_soyad || sorumlu?.email || "";
+
+  if (sorumlu?.telefon) {
+    await smsGonder(
+      sorumlu.telefon,
+      `BATSO Kampanya: Size ${ids.length} firma atandi. Liste: batso.app/gorevler`
+    );
+  }
 
   let epostaDurumu: AtamaSonucu["epostaDurumu"] = "";
   if (sorumlu?.email) {
