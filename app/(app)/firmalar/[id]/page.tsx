@@ -9,6 +9,7 @@ import type { FirmaRow, GorusmeRow } from "@/lib/database.types";
 import { destekDurumuGuncelle, gorusmeEkle, gorevAta } from "./actions";
 
 type KisiOzet = { ad_soyad: string | null; email: string } | null;
+type FirmaKisi = { id: string; ad_soyad: string; telefon: string | null; etiket: string | null };
 type FirmaDetay = FirmaRow & {
   meslek_gruplari: { ad: string } | null;
   ana_sorumlu: KisiOzet;
@@ -33,23 +34,30 @@ export default async function FirmaDetayPage({ params }: { params: Promise<{ id:
   const firma = firmaData as unknown as FirmaDetay | null;
   if (!firma) notFound();
 
-  const [{ data: gorusmelerData }, { data: iliskiliKisilerData }] = await Promise.all([
-    supabase
-      .from("gorusmeler")
-      .select("*, gorusen:gorusen_id(ad_soyad, email)")
-      .eq("firma_id", id)
-      .order("created_at", { ascending: false }),
-    firma.soyisim_grubu
-      ? supabase
-          .from("firmalar")
-          .select("id, firma_unvani, yetkili_kisi, destek_durumu")
-          .eq("soyisim_grubu", firma.soyisim_grubu)
-          .neq("id", id)
-      : Promise.resolve({ data: [] as IliskiliKisi[] }),
-  ]);
+  const [{ data: gorusmelerData }, { data: iliskiliKisilerData }, { data: kisilerData }] =
+    await Promise.all([
+      supabase
+        .from("gorusmeler")
+        .select("*, gorusen:gorusen_id(ad_soyad, email)")
+        .eq("firma_id", id)
+        .order("created_at", { ascending: false }),
+      firma.soyisim_grubu
+        ? supabase
+            .from("firmalar")
+            .select("id, firma_unvani, yetkili_kisi, destek_durumu")
+            .eq("soyisim_grubu", firma.soyisim_grubu)
+            .neq("id", id)
+        : Promise.resolve({ data: [] as IliskiliKisi[] }),
+      supabase
+        .from("kisiler")
+        .select("id, ad_soyad, telefon, etiket")
+        .eq("firma_id", id)
+        .order("created_at"),
+    ]);
 
   const gorusmeler = gorusmelerData as unknown as GorusmeDetay[] | null;
   const iliskiliKisiler = iliskiliKisilerData as unknown as IliskiliKisi[] | null;
+  const kisiler = (kisilerData ?? []) as unknown as FirmaKisi[];
 
   let profiller: { id: string; ad_soyad: string | null; email: string }[] = [];
   if (profile.rol === "admin") {
@@ -86,8 +94,30 @@ export default async function FirmaDetayPage({ params }: { params: Promise<{ id:
             <Info label="Vergi No" value={firma.vergi_no} />
             <Info label="Oda Sicil No" value={firma.oda_sicil_no} />
             <Info label="Aidat/Engel Durumu" value={firma.aidat_engel_durumu} />
+            <Info label="Mahalle" value={firma.mahalle} />
+            <Info label="Referans" value={firma.referans} />
             <Info label="Adres" value={firma.adres} />
           </dl>
+          {kisiler.length > 0 && (
+            <div className="rounded-lg bg-slate-50 p-2">
+              <p className="mb-1 text-xs font-medium text-slate-500">Kişiler</p>
+              <ul className="space-y-1">
+                {kisiler.map((k) => (
+                  <li key={k.id} className="flex items-center justify-between text-sm">
+                    <span className="text-slate-800">
+                      {k.ad_soyad}
+                      {k.etiket && <span className="ml-1 text-xs text-slate-400">({k.etiket})</span>}
+                    </span>
+                    {k.telefon && (
+                      <a href={`tel:${k.telefon}`} className="text-slate-600 underline">
+                        {k.telefon}
+                      </a>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           {firma.notlar && (
             <p className="rounded-lg bg-slate-50 p-2 text-sm text-slate-600">📝 {firma.notlar}</p>
           )}
@@ -145,6 +175,18 @@ export default async function FirmaDetayPage({ params }: { params: Promise<{ id:
                   </option>
                 ))}
               </select>
+              <label className="text-xs text-slate-500">Referans</label>
+              <input
+                name="referans"
+                defaultValue={firma.referans ?? ""}
+                className="h-11 rounded-lg border border-slate-300 px-2 text-sm"
+              />
+              <label className="text-xs text-slate-500">Mahalle</label>
+              <input
+                name="mahalle"
+                defaultValue={firma.mahalle ?? ""}
+                className="h-11 rounded-lg border border-slate-300 px-2 text-sm"
+              />
               <label className="text-xs text-slate-500">Aile / Dostluk İlişkisi Notu</label>
               <input
                 name="aile_dostluk_notu"

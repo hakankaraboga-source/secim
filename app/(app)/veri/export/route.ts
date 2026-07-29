@@ -36,6 +36,8 @@ export async function GET() {
     "Yetki Belgesi Durumu": f.yetki_belgesi_durumu,
     "Aidat/Engel Durumu": f.aidat_engel_durumu,
     Adres: f.adres,
+    Mahalle: f.mahalle,
+    Referans: f.referans,
     "Soyisim Grubu": f.soyisim_grubu,
     "Destek Durumu": DESTEK_DURUMLARI[f.destek_durumu as DestekDurumu]?.label ?? f.destek_durumu,
     "Ana Sorumlu": f.ana_sorumlu?.ad_soyad || f.ana_sorumlu?.email || "",

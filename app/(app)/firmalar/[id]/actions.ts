@@ -54,6 +54,8 @@ export async function gorevAta(firmaId: string, formData: FormData) {
   const ikinciBaglantiId = String(formData.get("ikinci_baglanti_id") ?? "").trim() || null;
   const bekleyenGorev = String(formData.get("bekleyen_gorev") ?? "").trim() || null;
   const aileNotu = String(formData.get("aile_dostluk_notu") ?? "").trim() || null;
+  const referans = String(formData.get("referans") ?? "").trim() || null;
+  const mahalle = String(formData.get("mahalle") ?? "").trim() || null;
 
   const supabase = await createClient();
   const { error } = await supabase
@@ -63,6 +65,8 @@ export async function gorevAta(firmaId: string, formData: FormData) {
       ikinci_baglanti_id: ikinciBaglantiId,
       bekleyen_gorev: bekleyenGorev,
       aile_dostluk_notu: aileNotu,
+      referans,
+      mahalle,
     })
     .eq("id", firmaId);
   if (error) throw new Error(error.message);

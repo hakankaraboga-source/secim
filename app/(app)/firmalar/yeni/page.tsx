@@ -28,6 +28,8 @@ export default async function YeniFirmaPage() {
           <Field name="vergi_no" label="Vergi No" />
           <Field name="oda_sicil_no" label="Oda Sicil No" />
           <Field name="soyisim_grubu" label="Soyisim Grubu (bağlantılı kişiler için)" />
+          <Field name="mahalle" label="Mahalle" />
+          <Field name="referans" label="Referans" />
           <Field name="adres" label="Adres" />
           <label className="text-xs text-slate-500">Notlar</label>
           <textarea name="notlar" className="min-h-20 rounded-lg border border-slate-300 p-2 text-sm" />

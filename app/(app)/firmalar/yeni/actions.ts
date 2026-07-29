@@ -24,6 +24,8 @@ export async function firmaOlustur(formData: FormData) {
       vergi_no: String(formData.get("vergi_no") ?? "").trim() || null,
       oda_sicil_no: String(formData.get("oda_sicil_no") ?? "").trim() || null,
       soyisim_grubu: String(formData.get("soyisim_grubu") ?? "").trim() || null,
+      mahalle: String(formData.get("mahalle") ?? "").trim() || null,
+      referans: String(formData.get("referans") ?? "").trim() || null,
       adres: String(formData.get("adres") ?? "").trim() || null,
       notlar: String(formData.get("notlar") ?? "").trim() || null,
     })

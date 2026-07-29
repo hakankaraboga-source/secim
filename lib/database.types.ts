@@ -49,8 +49,19 @@ export interface FirmaRow {
   tekrar_arama_tarihi: string | null;
   secim_gunu_durumu: SecimGunuDurumuDb;
   sandik_grup_bilgisi: string | null;
+  mahalle: string | null;
+  referans: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export interface KisiRow {
+  id: string;
+  firma_id: string;
+  ad_soyad: string;
+  telefon: string | null;
+  etiket: string | null;
+  created_at: string;
 }
 
 export interface GorusmeRow {
@@ -121,6 +132,7 @@ export interface Database {
       profiles: { Row: ProfileRow; Insert: Partial<ProfileRow>; Update: Partial<ProfileRow> };
       firmalar: { Row: FirmaRow; Insert: Partial<FirmaRow>; Update: Partial<FirmaRow> };
       gorusmeler: { Row: GorusmeRow; Insert: Partial<GorusmeRow>; Update: Partial<GorusmeRow> };
+      kisiler: { Row: KisiRow; Insert: Partial<KisiRow>; Update: Partial<KisiRow> };
       islem_kayitlari: { Row: IslemKaydiRow; Insert: Partial<IslemKaydiRow>; Update: Partial<IslemKaydiRow> };
       secim_ayarlari: { Row: SecimAyarlariRow; Insert: Partial<SecimAyarlariRow>; Update: Partial<SecimAyarlariRow> };
     };
