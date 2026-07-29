@@ -83,7 +83,7 @@ export default async function GenelTakipPage({
 
   return (
     <div className="flex flex-1 flex-col">
-      <Header profile={profile} title="Genel Takip" />
+      <Header profile={profile} title="Firmalar — Genel Takip" />
       <div className="mx-auto w-full max-w-2xl md:max-w-6xl flex-1 space-y-3 p-4">
         {/* Filtreler */}
         <form method="get" className="space-y-2 rounded-xl bg-white p-3 shadow-sm">

@@ -169,7 +169,56 @@ export default async function AnaSayfa() {
           </section>
         )}
 
-        {/* Hedefe ilerleme */}
+        {/* Saha kullanicisi: bugun aranacaklar - sade buyuk dokunma alanli liste */}
+        {!admin && (
+          <section className="rounded-2xl bg-white p-4 shadow-sm">
+            <div className="mb-2 flex items-center justify-between">
+              <h2 className="text-sm font-semibold text-slate-700">📞 Bugün Aranacaklar</h2>
+              <Link href="/gorevler" className="text-xs text-slate-400 hover:text-slate-600">
+                Tümü →
+              </Link>
+            </div>
+            {bekleyenler.length === 0 ? (
+              <p className="text-sm text-slate-500">
+                Bugün için bekleyen aramanız yok. 🎉 Yeni firma görüşmek için{" "}
+                <Link href="/firmalar?durum=gorusulmedi" className="underline">
+                  görüşülmemiş firmalara
+                </Link>{" "}
+                bakabilirsiniz.
+              </p>
+            ) : (
+              <ul className="space-y-2">
+                {bekleyenler.map((f) => (
+                  <li key={f.id} className="flex items-stretch gap-2">
+                    <Link
+                      href={`/firmalar/${f.id}`}
+                      className="min-w-0 flex-1 rounded-xl border border-slate-100 p-3 active:bg-slate-50"
+                    >
+                      <p className="truncate font-medium text-slate-900">{f.firma_unvani}</p>
+                      <p className="truncate text-xs text-slate-500">{f.yetkili_kisi ?? "-"}</p>
+                      {f.bekleyen_gorev && (
+                        <p className="truncate text-xs text-amber-700">📌 {f.bekleyen_gorev}</p>
+                      )}
+                    </Link>
+                    {f.yetkili_telefon && (
+                      <a
+                        href={`tel:${f.yetkili_telefon}`}
+                        aria-label={`${f.firma_unvani} firmasını ara`}
+                        className="flex w-16 items-center justify-center rounded-xl bg-green-600 text-2xl text-white active:bg-green-700"
+                      >
+                        📞
+                      </a>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        )}
+
+        {/* Yonetici bolumleri: hedef, dagilim, sayilar, ekip, listeler */}
+        {admin && (
+          <>
         <section className="rounded-2xl bg-slate-900 p-5 text-white shadow-sm">
           <div className="flex items-end justify-between gap-4">
             <div>
@@ -312,7 +361,7 @@ export default async function AnaSayfa() {
         )}
 
         <div className="grid gap-4 md:grid-cols-2">
-          {/* Bekleyen gorevler */}
+          {/* Bekleyen gorevler (yonetici) */}
           <section className="rounded-2xl bg-white p-4 shadow-sm">
             <div className="mb-2 flex items-center justify-between">
               <h2 className="text-sm font-semibold text-slate-700">Tekrar Aranacak Firmalar</h2>
@@ -375,10 +424,12 @@ export default async function AnaSayfa() {
             )}
           </section>
         </div>
+          </>
+        )}
 
         {/* Hizli erisim */}
         <section className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          <HizliLink href="/firmalar" ikon="📋" etiket="Genel Takip" />
+          <HizliLink href="/firmalar" ikon="🏢" etiket="Firmalar" />
           <HizliLink href="/kisiler" ikon="👤" etiket="Kişiler" />
           <HizliLink href="/gorevler" ikon="✅" etiket="Görevler" />
           {(profile.rol === "admin" || profile.rol === "grup_sorumlusu") && (

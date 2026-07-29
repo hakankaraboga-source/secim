@@ -13,9 +13,9 @@ type NavItem = {
 
 const NAV_ITEMS: NavItem[] = [
   { href: "/", label: "Ana Sayfa", icon: "🏠", roller: ["admin", "saha", "telefon", "grup_sorumlusu", "secim_gunu"] },
-  { href: "/firmalar", label: "Takip", icon: "📋", roller: ["admin", "saha", "telefon", "grup_sorumlusu"] },
+  { href: "/firmalar", label: "Firmalar", icon: "🏢", roller: ["admin", "saha", "telefon", "grup_sorumlusu"] },
   { href: "/kisiler", label: "Kişiler", icon: "👤", roller: ["admin", "saha", "telefon", "grup_sorumlusu"] },
-  { href: "/gorevler", label: "Görevler", icon: "✅", roller: ["admin", "saha", "telefon"] },
+  { href: "/gorevler", label: "Görevler", icon: "✅", roller: ["admin", "saha", "telefon", "grup_sorumlusu"] },
   { href: "/raporlar", label: "Raporlar", icon: "📊", roller: ["admin", "grup_sorumlusu"] },
   { href: "/secim-gunu", label: "Seçim Günü", icon: "🗳️", roller: ["admin", "secim_gunu"] },
   { href: "/yonetim", label: "Yönetim", icon: "⚙️", roller: ["admin"] },
