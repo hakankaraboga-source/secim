@@ -60,14 +60,17 @@ export default async function YonetimPage() {
     <div className="flex flex-1 flex-col">
       <Header profile={profile} title="Yönetim Paneli" />
       <div className="mx-auto w-full max-w-2xl md:max-w-4xl flex-1 space-y-4 p-4">
-        <div className="flex gap-2">
-          <Link href="/yonetim/kullanicilar" className="flex-1 rounded-xl bg-white p-3 text-center text-sm font-medium text-slate-700 shadow-sm">
+        <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
+          <Link href="/yonetim/atamalar" className="rounded-xl bg-white p-3 text-center text-sm font-medium text-slate-700 shadow-sm">
+            🎯 Atamalar
+          </Link>
+          <Link href="/yonetim/kullanicilar" className="rounded-xl bg-white p-3 text-center text-sm font-medium text-slate-700 shadow-sm">
             👤 Kullanıcılar
           </Link>
-          <Link href="/yonetim/ayarlar" className="flex-1 rounded-xl bg-white p-3 text-center text-sm font-medium text-slate-700 shadow-sm">
+          <Link href="/yonetim/ayarlar" className="rounded-xl bg-white p-3 text-center text-sm font-medium text-slate-700 shadow-sm">
             ⚙️ Seçim Ayarları
           </Link>
-          <Link href="/veri" className="flex-1 rounded-xl bg-white p-3 text-center text-sm font-medium text-slate-700 shadow-sm">
+          <Link href="/veri" className="rounded-xl bg-white p-3 text-center text-sm font-medium text-slate-700 shadow-sm">
             📄 Excel
           </Link>
         </div>

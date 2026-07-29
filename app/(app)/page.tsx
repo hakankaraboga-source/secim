@@ -6,7 +6,7 @@ import { DestekBadge } from "@/components/DestekBadge";
 import { Header } from "@/components/Header";
 import { CihazBanner } from "@/components/CihazBanner";
 import { DESTEK_DURUMLARI, type DestekDurumu } from "@/lib/constants";
-import type { GenelOzetRow } from "@/lib/database.types";
+import type { GenelOzetRow, AksiyonOzetRow, EkipOzetRow } from "@/lib/database.types";
 
 type SonGorusme = {
   id: string;
@@ -45,6 +45,8 @@ export default async function AnaSayfa() {
     gunlukGorusme,
     bekleyenler,
     { data: sonGorusmelerData },
+    { data: aksiyonData },
+    { data: ekipData },
   ] = await Promise.all([
     supabase.from("genel_ozet").select("*").single(),
     supabase.from("secim_ayarlari").select("*").single(),
@@ -55,10 +57,16 @@ export default async function AnaSayfa() {
       .select("id, tip, sonuc, created_at, firmalar(firma_unvani), gorusen:gorusen_id(ad_soyad, email)")
       .order("created_at", { ascending: false })
       .limit(5),
+    supabase.from("aksiyon_ozet").select("*").single(),
+    supabase.from("ekip_ozet").select("*").order("atanan_firma", { ascending: false }),
   ]);
 
   const ozet = (genelOzetData ?? null) as GenelOzetRow | null;
   const sonGorusmeler = (sonGorusmelerData ?? []) as unknown as SonGorusme[];
+  const aksiyon = (aksiyonData ?? null) as AksiyonOzetRow | null;
+  const ekip = (ekipData ?? []) as EkipOzetRow[];
+  const benimOzetim = ekip.find((e) => e.id === profile.id) ?? null;
+  const admin = profile.rol === "admin";
 
   const gerekenOy = secimAyarlari?.gereken_oy_sayisi ?? 0;
   const kesinDestek = ozet?.kesin_destek ?? 0;
@@ -96,6 +104,70 @@ export default async function AnaSayfa() {
           </p>
           <p className="text-sm text-slate-500">{bugun} · Başkan Adayımız: Ferdi Kurt</p>
         </div>
+
+        {/* Yonetici: bugun yapilmasi gerekenler */}
+        {admin && aksiyon && (
+          <section>
+            <h2 className="mb-2 text-sm font-semibold text-slate-700">⚡ Aksiyon Gerekiyor</h2>
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+              <AksiyonKart
+                deger={aksiyon.sorumsuz}
+                etiket="Sorumlusu olmayan firma"
+                aciklama="Atama yap →"
+                href="/yonetim/atamalar"
+                renk={aksiyon.sorumsuz > 0 ? "kirmizi" : "yesil"}
+              />
+              <AksiyonKart
+                deger={aksiyon.geciken}
+                etiket="Geciken takip"
+                aciklama="Görevleri gör →"
+                href="/gorevler"
+                renk={aksiyon.geciken > 0 ? "kirmizi" : "yesil"}
+              />
+              <AksiyonKart
+                deger={aksiyon.bekleyen_gorev}
+                etiket="Bekleyen görev"
+                aciklama="Görevleri gör →"
+                href="/gorevler"
+                renk={aksiyon.bekleyen_gorev > 0 ? "sari" : "yesil"}
+              />
+              <AksiyonKart
+                deger={aksiyon.kararsiz}
+                etiket="Kararsız firma"
+                aciklama="İkna listesi →"
+                href="/firmalar?durum=kararsiz"
+                renk={aksiyon.kararsiz > 0 ? "sari" : "yesil"}
+              />
+            </div>
+          </section>
+        )}
+
+        {/* Saha kullanicisi: kendi portfoyu */}
+        {!admin && benimOzetim && (
+          <section className="rounded-2xl bg-white p-4 shadow-sm">
+            <h2 className="mb-2 text-sm font-semibold text-slate-700">📌 Portföyüm</h2>
+            <div className="grid grid-cols-4 gap-2 text-center">
+              <div>
+                <p className="text-xl font-bold text-slate-900">{benimOzetim.atanan_firma}</p>
+                <p className="text-xs text-slate-500">Atanan</p>
+              </div>
+              <div>
+                <p className="text-xl font-bold text-green-700">{benimOzetim.kesin_destek}</p>
+                <p className="text-xs text-slate-500">Kesin destek</p>
+              </div>
+              <div>
+                <p className="text-xl font-bold text-blue-700">{benimOzetim.gorusulmedi}</p>
+                <p className="text-xs text-slate-500">Görüşülmedi</p>
+              </div>
+              <div>
+                <p className={`text-xl font-bold ${benimOzetim.geciken > 0 ? "text-red-600" : "text-slate-900"}`}>
+                  {benimOzetim.geciken}
+                </p>
+                <p className="text-xs text-slate-500">Geciken</p>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Hedefe ilerleme */}
         <section className="rounded-2xl bg-slate-900 p-5 text-white shadow-sm">
@@ -188,6 +260,56 @@ export default async function AnaSayfa() {
           <StatKart etiket="Kararsız firma" deger={ozet?.kararsiz ?? 0} ikon="🟡" href="/firmalar?durum=kararsiz" />
           <StatKart etiket="Görüşülmedi" deger={ozet?.gorusulmedi ?? 0} ikon="🔵" href="/firmalar?durum=gorusulmedi" />
         </section>
+
+        {/* Yonetici: ekip takibi */}
+        {admin && ekip.length > 0 && (
+          <section className="rounded-2xl bg-white p-4 shadow-sm">
+            <div className="mb-2 flex items-center justify-between">
+              <h2 className="text-sm font-semibold text-slate-700">👥 Ekip Takibi</h2>
+              <Link href="/yonetim/atamalar" className="text-xs text-slate-400 hover:text-slate-600">
+                Atama yap →
+              </Link>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-slate-100 text-left text-xs text-slate-400">
+                    <th className="py-1.5 pr-2">Sorumlu</th>
+                    <th className="px-2 py-1.5 text-right">Atanan</th>
+                    <th className="px-2 py-1.5 text-right">🟢 Destek</th>
+                    <th className="px-2 py-1.5 text-right">📞 7 gün</th>
+                    <th className="px-2 py-1.5 text-right">⏰ Geciken</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ekip
+                    .filter((e) => e.atanan_firma > 0 || e.son7g_gorusme > 0)
+                    .map((e) => (
+                      <tr key={e.id} className="border-b border-slate-50 last:border-0">
+                        <td className="max-w-[10rem] truncate py-2 pr-2 font-medium text-slate-900">
+                          {e.ad_soyad || e.email}
+                        </td>
+                        <td className="px-2 py-2 text-right text-slate-600">{e.atanan_firma}</td>
+                        <td className="px-2 py-2 text-right text-green-700">{e.kesin_destek}</td>
+                        <td className="px-2 py-2 text-right text-slate-600">{e.son7g_gorusme}</td>
+                        <td className={`px-2 py-2 text-right ${e.geciken > 0 ? "font-semibold text-red-600" : "text-slate-400"}`}>
+                          {e.geciken}
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+              {ekip.every((e) => e.atanan_firma === 0 && e.son7g_gorusme === 0) && (
+                <p className="py-2 text-sm text-slate-500">
+                  Henüz atama yapılmadı.{" "}
+                  <Link href="/yonetim/atamalar" className="underline">
+                    İlk atamayı yapın →
+                  </Link>
+                </p>
+              )}
+            </div>
+          </section>
+        )}
 
         <div className="grid gap-4 md:grid-cols-2">
           {/* Bekleyen gorevler */}
@@ -295,6 +417,33 @@ function StatKart({
     </div>
   );
   return href ? <Link href={href}>{icerik}</Link> : icerik;
+}
+
+function AksiyonKart({
+  deger,
+  etiket,
+  aciklama,
+  href,
+  renk,
+}: {
+  deger: number;
+  etiket: string;
+  aciklama: string;
+  href: string;
+  renk: "kirmizi" | "sari" | "yesil";
+}) {
+  const stiller = {
+    kirmizi: "bg-red-50 text-red-700",
+    sari: "bg-amber-50 text-amber-700",
+    yesil: "bg-emerald-50 text-emerald-700",
+  } as const;
+  return (
+    <Link href={href} className={`rounded-2xl p-3.5 shadow-sm ${stiller[renk]}`}>
+      <p className="text-2xl font-bold">{deger}</p>
+      <p className="text-xs font-medium">{etiket}</p>
+      <p className="mt-1 text-xs opacity-70">{aciklama}</p>
+    </Link>
+  );
 }
 
 function HizliLink({ href, ikon, etiket }: { href: string; ikon: string; etiket: string }) {

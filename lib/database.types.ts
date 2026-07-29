@@ -125,6 +125,27 @@ export interface SecimAyarlariRow {
   gereken_oy_sayisi: number;
 }
 
+export interface AksiyonOzetRow {
+  sorumsuz: number;
+  geciken: number;
+  bekleyen_gorev: number;
+  kararsiz: number;
+  gorusulmedi: number;
+}
+
+export interface EkipOzetRow {
+  id: string;
+  ad_soyad: string | null;
+  email: string;
+  rol: UserRole;
+  atanan_firma: number;
+  kesin_destek: number;
+  gorusulmedi: number;
+  geciken: number;
+  bekleyen_gorev: number;
+  son7g_gorusme: number;
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -140,6 +161,8 @@ export interface Database {
       meslek_grubu_ozet: { Row: MeslekGrubuOzetRow };
       genel_ozet: { Row: GenelOzetRow };
       secim_gunu_ozet: { Row: SecimGunuOzetRow };
+      aksiyon_ozet: { Row: AksiyonOzetRow };
+      ekip_ozet: { Row: EkipOzetRow };
     };
   };
 }
