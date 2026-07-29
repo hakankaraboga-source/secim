@@ -19,7 +19,7 @@ export async function epostaGonder(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: process.env.EMAIL_FROM ?? "BATSO Kampanya <onboarding@resend.dev>",
+        from: process.env.EMAIL_FROM ?? "BATSO Kampanya <kampanya@mail.ivdiq.com>",
         to,
         subject,
         html,
