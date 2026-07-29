@@ -12,12 +12,12 @@ type NavItem = {
 };
 
 const NAV_ITEMS: NavItem[] = [
-  { href: "/", label: "Ana Sayfa", icon: "🏠", roller: ["admin", "saha", "telefon", "grup_sorumlusu", "secim_gunu"] },
-  { href: "/firmalar", label: "Firmalar", icon: "🏢", roller: ["admin", "saha", "telefon", "grup_sorumlusu"] },
-  { href: "/kisiler", label: "Kişiler", icon: "👤", roller: ["admin", "saha", "telefon", "grup_sorumlusu"] },
-  { href: "/gorevler", label: "Görevler", icon: "✅", roller: ["admin", "saha", "telefon", "grup_sorumlusu"] },
-  { href: "/raporlar", label: "Raporlar", icon: "📊", roller: ["admin", "grup_sorumlusu"] },
-  { href: "/secim-gunu", label: "Seçim Günü", icon: "🗳️", roller: ["admin", "secim_gunu"] },
+  { href: "/", label: "Ana Sayfa", icon: "🏠", roller: ["admin", "yonetici", "temsilci", "saha", "telefon", "grup_sorumlusu", "secim_gunu"] },
+  { href: "/firmalar", label: "Firmalar", icon: "🏢", roller: ["admin", "yonetici", "temsilci", "saha", "telefon", "grup_sorumlusu"] },
+  { href: "/kisiler", label: "Kişiler", icon: "👤", roller: ["admin", "yonetici", "temsilci", "saha", "telefon", "grup_sorumlusu"] },
+  { href: "/gorevler", label: "Görevler", icon: "✅", roller: ["admin", "yonetici", "temsilci", "saha", "telefon", "grup_sorumlusu"] },
+  { href: "/raporlar", label: "Raporlar", icon: "📊", roller: ["admin", "yonetici", "grup_sorumlusu"] },
+  { href: "/secim-gunu", label: "Seçim Günü", icon: "🗳️", roller: ["admin", "yonetici", "secim_gunu"] },
   { href: "/yonetim", label: "Yönetim", icon: "⚙️", roller: ["admin"] },
 ];
 

@@ -23,14 +23,20 @@ export const DESTEK_DURUMLARI = {
 export type DestekDurumu = keyof typeof DESTEK_DURUMLARI;
 
 export const KULLANICI_ROLLERI = {
-  admin: "Admin (Genel Yönetici)",
-  saha: "Saha Kullanıcısı",
-  telefon: "Telefon Ekibi Kullanıcısı",
-  grup_sorumlusu: "Grup Sorumlusu",
+  admin: "Admin",
+  yonetici: "Yönetici",
+  temsilci: "Temsilci",
   secim_gunu: "Seçim Günü Görevlisi",
+  // Eski roller (0008 migration'i temsilci/yoneticiye tasir; gecis donemi etiketi)
+  saha: "Temsilci",
+  telefon: "Temsilci",
+  grup_sorumlusu: "Temsilci",
 } as const;
 
 export type KullaniciRolu = keyof typeof KULLANICI_ROLLERI;
+
+// Kullanici tanimlama ekraninda secilebilen roller
+export const ROL_SECENEKLERI = ["admin", "yonetici", "temsilci", "secim_gunu"] as const;
 
 export const SECIM_GUNU_DURUMLARI = {
   bekleniyor: { label: "Henüz gelmedi", color: "#6b7280" },

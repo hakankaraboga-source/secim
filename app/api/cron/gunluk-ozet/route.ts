@@ -117,7 +117,7 @@ export async function GET(request: Request) {
           })
           .join("")}</ul>`;
 
-  const adminler = (profiller ?? []).filter((p) => p.rol === "admin");
+  const adminler = (profiller ?? []).filter((p) => p.rol === "admin" || p.rol === "yonetici");
   for (const a of adminler) {
     const sonuc = await epostaGonder(
       a.email,

@@ -66,7 +66,7 @@ export default async function AnaSayfa() {
   const aksiyon = (aksiyonData ?? null) as AksiyonOzetRow | null;
   const ekip = (ekipData ?? []) as EkipOzetRow[];
   const benimOzetim = ekip.find((e) => e.id === profile.id) ?? null;
-  const admin = profile.rol === "admin";
+  const admin = profile.rol === "admin" || profile.rol === "yonetici";
 
   const gerekenOy = secimAyarlari?.gereken_oy_sayisi ?? 0;
   const kesinDestek = ozet?.kesin_destek ?? 0;
@@ -432,7 +432,7 @@ export default async function AnaSayfa() {
           <HizliLink href="/firmalar" ikon="🏢" etiket="Firmalar" />
           <HizliLink href="/kisiler" ikon="👤" etiket="Kişiler" />
           <HizliLink href="/gorevler" ikon="✅" etiket="Görevler" />
-          {(profile.rol === "admin" || profile.rol === "grup_sorumlusu") && (
+          {(profile.rol === "admin" || profile.rol === "yonetici" || profile.rol === "grup_sorumlusu") && (
             <HizliLink href="/raporlar" ikon="📊" etiket="Raporlar" />
           )}
           {profile.rol === "admin" && <HizliLink href="/yonetim" ikon="⚙️" etiket="Yönetim" />}

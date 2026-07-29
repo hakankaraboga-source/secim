@@ -1,4 +1,12 @@
-export type UserRole = "admin" | "saha" | "telefon" | "grup_sorumlusu" | "secim_gunu";
+export type UserRole =
+  | "admin"
+  | "yonetici"
+  | "temsilci"
+  | "secim_gunu"
+  // eski roller (0008 sonrasi veride kalmaz, tip uyumu icin)
+  | "saha"
+  | "telefon"
+  | "grup_sorumlusu";
 export type DestekDurumuDb = "kesin_destek" | "kararsiz" | "rakip" | "gorusulmedi" | "oy_kullanamaz";
 export type GorusmeTipiDb = "telefon" | "yuz_yuze";
 export type SecimGunuDurumuDb =
@@ -23,6 +31,8 @@ export interface ProfileRow {
   telefon: string | null;
   rol: UserRole;
   meslek_grubu_id: string | null;
+  yetki_meslek_gruplari: string[];
+  yetki_mahalleler: string[];
   aktif: boolean;
   created_at: string;
 }
