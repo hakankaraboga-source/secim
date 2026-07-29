@@ -9,9 +9,8 @@ export type GirisState = {
 };
 
 // Iki adimli giris (sifre sonrasi e-posta kodu) anahtari.
-// Ozel SMTP baglanmadan acilmamali: Supabase'in yerlesik e-posta servisi
-// saatte birkac e-postayla sinirli, ekip girisleri hemen tikanir.
-const OTP_AKTIF = false;
+// Resend SMTP Supabase'e baglandigi icin acik (saatte 100 e-posta limiti).
+const OTP_AKTIF = true;
 
 export async function girisYap(_prevState: GirisState, formData: FormData): Promise<GirisState> {
   const email = String(formData.get("email") ?? "").trim().toLowerCase();

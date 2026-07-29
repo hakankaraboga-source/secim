@@ -436,6 +436,7 @@ export default async function AnaSayfa() {
             <HizliLink href="/raporlar" ikon="📊" etiket="Raporlar" />
           )}
           {profile.rol === "admin" && <HizliLink href="/yonetim" ikon="⚙️" etiket="Yönetim" />}
+          <HizliLink href="/kilavuz" ikon="📖" etiket="Kılavuz" />
         </section>
       </div>
     </div>
