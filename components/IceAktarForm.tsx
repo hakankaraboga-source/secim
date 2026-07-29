@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { iceAktar, type IceAktarSonucu } from "@/app/(app)/veri/actions";
 
-const BASLANGIC: IceAktarSonucu = { status: "idle", eklenen: 0, hatalar: [] };
+const BASLANGIC: IceAktarSonucu = { status: "idle", eklenen: 0, atlanan: 0, kisiEklenen: 0, hatalar: [] };
 
 export function IceAktarForm() {
   const [state, action, pending] = useActionState(iceAktar, BASLANGIC);
@@ -29,10 +29,18 @@ export function IceAktarForm() {
       {state.status === "error" && <p className="text-sm text-red-600">{state.message}</p>}
       {state.status === "ok" && (
         <div className="text-sm text-slate-700">
-          <p className="font-medium text-green-700">{state.eklenen} firma eklendi.</p>
+          <p className="font-medium text-green-700">
+            {state.eklenen} firma eklendi{state.kisiEklenen > 0 && `, ${state.kisiEklenen} kişi kaydı oluşturuldu`}.
+          </p>
+          {state.atlanan > 0 && (
+            <p className="text-slate-500">
+              {state.atlanan} satır zaten kayıtlı olduğu için atlandı (sicil no eşleşti).
+            </p>
+          )}
+          {state.message && <p className="text-slate-500">{state.message}</p>}
           {state.hatalar.length > 0 && (
             <ul className="mt-2 list-disc pl-4 text-red-600">
-              {state.hatalar.map((h, i) => (
+              {state.hatalar.slice(0, 20).map((h, i) => (
                 <li key={i}>
                   Satır {h.satir}: {h.hata}
                 </li>
