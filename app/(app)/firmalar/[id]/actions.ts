@@ -49,6 +49,27 @@ export async function gorusmeEkle(firmaId: string, formData: FormData) {
   revalidatePath("/");
 }
 
+export async function kisiEkle(firmaId: string, formData: FormData) {
+  const ad_soyad = String(formData.get("ad_soyad") ?? "").trim();
+  if (!ad_soyad) throw new Error("Kişi adı zorunlu.");
+  const telefon = String(formData.get("telefon") ?? "").trim() || null;
+  const etiket = String(formData.get("etiket") ?? "").trim() || null;
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("kisiler").insert({ firma_id: firmaId, ad_soyad, telefon, etiket });
+  if (error) throw new Error(error.message);
+  revalidatePath(`/firmalar/${firmaId}`);
+  revalidatePath("/kisiler");
+}
+
+export async function kisiSil(firmaId: string, kisiId: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("kisiler").delete().eq("id", kisiId);
+  if (error) throw new Error(error.message);
+  revalidatePath(`/firmalar/${firmaId}`);
+  revalidatePath("/kisiler");
+}
+
 export async function gorevAta(firmaId: string, formData: FormData) {
   const anaSorumluId = String(formData.get("ana_sorumlu_id") ?? "").trim() || null;
   const ikinciBaglantiId = String(formData.get("ikinci_baglanti_id") ?? "").trim() || null;

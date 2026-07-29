@@ -6,7 +6,7 @@ import { Header } from "@/components/Header";
 import { DestekDurumuForm } from "@/components/DestekDurumuForm";
 import { GORUSME_TIPI, DESTEK_DURUMLARI, type DestekDurumu } from "@/lib/constants";
 import type { FirmaRow, GorusmeRow } from "@/lib/database.types";
-import { destekDurumuGuncelle, gorusmeEkle, gorevAta } from "./actions";
+import { destekDurumuGuncelle, gorusmeEkle, gorevAta, kisiEkle, kisiSil } from "./actions";
 
 type KisiOzet = { ad_soyad: string | null; email: string } | null;
 type FirmaKisi = { id: string; ad_soyad: string; telefon: string | null; etiket: string | null };
@@ -95,29 +95,81 @@ export default async function FirmaDetayPage({ params }: { params: Promise<{ id:
             <Info label="Oda Sicil No" value={firma.oda_sicil_no} />
             <Info label="Aidat/Engel Durumu" value={firma.aidat_engel_durumu} />
             <Info label="Mahalle" value={firma.mahalle} />
-            <Info label="Referans" value={firma.referans} />
+            <div>
+              <dt className="text-xs text-slate-400">Referans</dt>
+              <dd className="text-slate-800">
+                {firma.referans ? (
+                  <Link
+                    href={`/firmalar?referans=${encodeURIComponent(firma.referans)}`}
+                    className="underline"
+                  >
+                    {firma.referans}
+                  </Link>
+                ) : (
+                  "-"
+                )}
+              </dd>
+            </div>
             <Info label="Adres" value={firma.adres} />
           </dl>
-          {kisiler.length > 0 && (
-            <div className="rounded-lg bg-slate-50 p-2">
-              <p className="mb-1 text-xs font-medium text-slate-500">Kişiler</p>
-              <ul className="space-y-1">
-                {kisiler.map((k) => (
-                  <li key={k.id} className="flex items-center justify-between text-sm">
-                    <span className="text-slate-800">
+          <div className="rounded-lg bg-slate-50 p-2">
+            <p className="mb-1 text-xs font-medium text-slate-500">Kişiler</p>
+            {kisiler.length === 0 && <p className="text-sm text-slate-500">Kayıtlı kişi yok.</p>}
+            <ul className="space-y-1">
+              {kisiler.map((k) => {
+                const silAction = kisiSil.bind(null, id, k.id);
+                return (
+                  <li key={k.id} className="flex items-center justify-between gap-2 text-sm">
+                    <Link href={`/kisiler/${k.id}`} className="min-w-0 truncate text-slate-800 underline">
                       {k.ad_soyad}
                       {k.etiket && <span className="ml-1 text-xs text-slate-400">({k.etiket})</span>}
+                    </Link>
+                    <span className="flex items-center gap-2">
+                      {k.telefon && (
+                        <a href={`tel:${k.telefon}`} className="whitespace-nowrap text-slate-600">
+                          {k.telefon}
+                        </a>
+                      )}
+                      {profile.rol === "admin" && (
+                        <form action={silAction}>
+                          <button
+                            type="submit"
+                            aria-label={`${k.ad_soyad} kaydını sil`}
+                            className="flex h-6 w-6 items-center justify-center rounded-full text-slate-400 hover:bg-slate-200"
+                          >
+                            ✕
+                          </button>
+                        </form>
+                      )}
                     </span>
-                    {k.telefon && (
-                      <a href={`tel:${k.telefon}`} className="text-slate-600 underline">
-                        {k.telefon}
-                      </a>
-                    )}
                   </li>
-                ))}
-              </ul>
-            </div>
-          )}
+                );
+              })}
+            </ul>
+            {profile.rol === "admin" && (
+              <form action={kisiEkle.bind(null, id)} className="mt-2 flex flex-wrap gap-1.5">
+                <input
+                  name="ad_soyad"
+                  required
+                  placeholder="Ad Soyad"
+                  className="h-9 min-w-0 flex-1 rounded-lg border border-slate-300 px-2 text-xs"
+                />
+                <input
+                  name="telefon"
+                  placeholder="Telefon"
+                  className="h-9 w-28 rounded-lg border border-slate-300 px-2 text-xs"
+                />
+                <input
+                  name="etiket"
+                  placeholder="Etiket (yetkili...)"
+                  className="h-9 w-28 rounded-lg border border-slate-300 px-2 text-xs"
+                />
+                <button type="submit" className="h-9 rounded-lg bg-slate-900 px-3 text-xs font-medium text-white">
+                  + Ekle
+                </button>
+              </form>
+            )}
+          </div>
           {firma.notlar && (
             <p className="rounded-lg bg-slate-50 p-2 text-sm text-slate-600">📝 {firma.notlar}</p>
           )}

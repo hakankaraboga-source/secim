@@ -256,7 +256,8 @@ export default async function AnaSayfa() {
 
         {/* Hizli erisim */}
         <section className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          <HizliLink href="/firmalar" ikon="🏢" etiket="Firmalar" />
+          <HizliLink href="/firmalar" ikon="📋" etiket="Genel Takip" />
+          <HizliLink href="/kisiler" ikon="👤" etiket="Kişiler" />
           <HizliLink href="/gorevler" ikon="✅" etiket="Görevler" />
           {(profile.rol === "admin" || profile.rol === "grup_sorumlusu") && (
             <HizliLink href="/raporlar" ikon="📊" etiket="Raporlar" />
